@@ -7,7 +7,7 @@ const router = Router();
 
 // Apply authentication and role check for all routes below
 router.use(authenticate);
-router.use(requireRole(ROLES.ALL_ADMINS));
+router.use(requireRole(ROLES.VIEW_ONLY_ADMIN));
 
 router.get('/', adminController.getAdminById);
 router.put('/', adminController.updateAdminDetails);

@@ -1,13 +1,14 @@
-import { ALLOWED_FIELDS } from '../../constants/admins/index.js';
+import { ALLOWED_FIELDS } from '../../constants/admins/index.js';;
 import { mapAllowedFields } from '../../utils/field-mapper.util.js';
 import { hashPassword } from '../../utils/password.util.js';
+import { sanitizeForAdmin } from '../../utils/sanitize.util.js';
 import { ensureEmailIsUnique } from '../shared/email.service.js';
 import * as adminModel from '../../models/admins/admin.model.js';
 
 // Get single admin
 export const getAdminById = async (adminId) => {
   const admin = await adminModel.findAdminById(adminId);
-  return { admin: admin };
+  return { admin: sanitizeForAdmin(admin) };
 };
 
 // Update admin details
@@ -21,5 +22,5 @@ export const updateAdmin = async (adminId, updates) => {
     filteredData.password = await hashPassword(filteredData.password);
   await adminModel.updateAdmin(adminId, filteredData);
   const admin = await adminModel.findAdminById(adminId);
-  return { admin: admin };
+  return { admin: sanitizeForAdmin(admin) };
 };

@@ -7,7 +7,7 @@ import * as orderService from '../../services/admins/order.service.js';
 // GET all orders with search, filters & pagination
 export const getAllOrders = asyncHandler(async (req, res) => {
   res.status(HTTP_STATUS.OK).json(buildResponse(
-      await orderService.getAllOrders(req.query),
+      await orderService.getAllOrders(req.user, req.query),
       MESSAGES.ORDER.FETCH_ORDERS_SUCCESS
   ));
 });
@@ -15,7 +15,7 @@ export const getAllOrders = asyncHandler(async (req, res) => {
 // GET all orders for a specific user with search, filters and pagination
 export const getAllUserOrders = asyncHandler(async (req, res) => {
   res.status(HTTP_STATUS.OK).json(buildResponse(
-      await orderService.getOrdersByUserId(req.params.userId, req.query),
+      await orderService.getOrdersByUserId(req.user, req.params.userId, req.query),
       MESSAGES.ORDER.FETCH_USER_ORDERS_SUCCESS
   ));
 });
@@ -23,7 +23,7 @@ export const getAllUserOrders = asyncHandler(async (req, res) => {
 // GET single order by ID
 export const getOrderByOrderId = asyncHandler(async (req, res) => {
   res.status(HTTP_STATUS.OK).json(buildResponse(
-      await orderService.getOrderByOrderId(req.params.orderId),
+      await orderService.getOrderByOrderId(req.user, req.params.orderId),
       MESSAGES.ORDER.FETCH_ORDER_SUCCESS
   ));
 });
@@ -31,7 +31,7 @@ export const getOrderByOrderId = asyncHandler(async (req, res) => {
 // Update order status
 export const updateOrderStatus = asyncHandler(async (req, res) => {
   res.status(HTTP_STATUS.OK).json(buildResponse(
-      await orderService.updateOrderStatus(req.user.id, req.params.orderId, req.body.status),
+      await orderService.updateOrderStatus(req.user, req.params.orderId, req.body.status),
       MESSAGES.ORDER.STATUS_UPDATE_SUCCESS
   ));
 });

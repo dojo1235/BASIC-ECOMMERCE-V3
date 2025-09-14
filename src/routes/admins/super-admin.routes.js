@@ -5,7 +5,7 @@ import * as superAdminController from '../../controllers/admins/super-admin.cont
 
 const router = Router();
 
-// Apply authentication and role check for all routes below
+// Apply authentication and role check for all routes below (Only super admin allowed)
 router.use(authenticate);
 router.use(requireRole(ROLES.SUPER_ADMIN));
 

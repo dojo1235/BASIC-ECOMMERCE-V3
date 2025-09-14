@@ -7,7 +7,7 @@ import * as userService from "../../services/admins/user.service.js";
 // Get all users with search, filters & pagination
 export const getAllUsers = asyncHandler(async (req, res) => {
   res.status(HTTP_STATUS.OK).json(buildResponse(
-      await userService.getAllUsers(req.query),
+      await userService.getAllUsers(req.user, req.query),
       MESSAGES.ADMIN.FETCH_USERS_SUCCESS
   ));
 });
@@ -15,7 +15,7 @@ export const getAllUsers = asyncHandler(async (req, res) => {
 // Get single user
 export const getUserById = asyncHandler(async (req, res) => {
   res.status(HTTP_STATUS.OK).json(buildResponse(
-      await userService.getUserById(req.params.userId),
+      await userService.getUserById(req.user, req.params.userId),
       MESSAGES.ADMIN.FETCH_USER_SUCCESS
   ));
 });
@@ -23,7 +23,7 @@ export const getUserById = asyncHandler(async (req, res) => {
 // Update user details
 export const updateUserDetails = asyncHandler(async (req, res) => {
   res.status(HTTP_STATUS.OK).json(buildResponse(
-      await userService.updateUser(req.user.id, req.params.userId, req.body),
+      await userService.updateUser(req.user, req.params.userId, req.body),
       MESSAGES.ADMIN.UPDATE_USER_SUCCESS
   ));
 });
@@ -31,7 +31,7 @@ export const updateUserDetails = asyncHandler(async (req, res) => {
 // Ban users
 export const banUser = asyncHandler(async (req, res) => {
   res.status(HTTP_STATUS.OK).json(buildResponse(
-      await userService.updateUser(req.user.id, req.params.userId, { isBanned: true }),
+      await userService.updateUser(req.user, req.params.userId, { isBanned: true }),
       MESSAGES.ADMIN.BAN_USER_SUCCESS
   ));
 });
@@ -39,7 +39,7 @@ export const banUser = asyncHandler(async (req, res) => {
 // Restore banned users
 export const unbanUser = asyncHandler(async (req, res) => {
   res.status(HTTP_STATUS.OK).json(buildResponse(
-      await userService.updateUser(req.user.id, req.params.userId, { isBanned: false }),
+      await userService.updateUser(req.user, req.params.userId, { isBanned: false }),
       MESSAGES.ADMIN.UNBAN_USER_SUCCESS
   ));
 });
@@ -47,7 +47,7 @@ export const unbanUser = asyncHandler(async (req, res) => {
 // Soft-delete users
 export const deleteUser = asyncHandler(async (req, res) => {
   res.status(HTTP_STATUS.OK).json(buildResponse(
-      await userService.updateUser(req.user.id, req.params.userId, { isDeleted: true }),
+      await userService.updateUser(req.user, req.params.userId, { isDeleted: true }),
       MESSAGES.ADMIN.DELETE_USER_SUCCESS
   ));
 });
@@ -55,7 +55,7 @@ export const deleteUser = asyncHandler(async (req, res) => {
 // Restore soft-deleted users
 export const restoreUser = asyncHandler(async (req, res) => {
   res.status(HTTP_STATUS.OK).json(buildResponse(
-      await userService.updateUser(req.user.id, req.params.userId, { isDeleted: false }),
+      await userService.updateUser(req.user, req.params.userId, { isDeleted: false }),
       MESSAGES.ADMIN.RESTORE_USER_SUCCESS
   ));
 });

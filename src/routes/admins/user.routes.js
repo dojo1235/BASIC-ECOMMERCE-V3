@@ -5,13 +5,17 @@ import * as userController from '../../controllers/admins/user.controller.js';
 
 const router = Router();
 
-// Apply authentication and role check for all routes below
+// Everyone authenticated
 router.use(authenticate);
+
+// READ (all admins)
+router.get('/', requireRole(ROLES.VIEW_ONLY_ADMIN), userController.getAllUsers);
+router.get('/count/all', requireRole(ROLES.VIEW_ONLY_ADMIN), userController.countUsers);
+router.get('/:userId', requireRole(ROLES.VIEW_ONLY_ADMIN), userController.getUserById);
+
+// WRITE (only user manager or higher roles)
 router.use(requireRole(ROLES.USER_MANAGER));
 
-router.get('/', userController.getAllUsers);
-router.get('/count/all', userController.countUsers);
-router.get('/:userId', userController.getUserById);
 router.put('/:userId', userController.updateUserDetails);
 router.put('/:userId/ban', userController.banUser);
 router.put('/:userId/unban', userController.unbanUser);

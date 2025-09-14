@@ -7,7 +7,7 @@ import * as productService from "../../services/admins/product.service.js";
 // Get all products with search, filters & pagination
 export const getAllProducts = asyncHandler(async (req, res) => {
   res.status(HTTP_STATUS.OK).json(buildResponse(
-      await productService.getAllProducts(req.query),
+      await productService.getAllProducts(req.user, req.query),
       MESSAGES.PRODUCT.FETCH_PRODUCTS_SUCCESS
   ));
 });
@@ -15,7 +15,7 @@ export const getAllProducts = asyncHandler(async (req, res) => {
 // Get single product
 export const getProductById = asyncHandler(async (req, res) => {
   res.status(HTTP_STATUS.OK).json(buildResponse(
-      await productService.getProductById(req.params.productId),
+      await productService.getProductById(req.user, req.params.productId),
       MESSAGES.PRODUCT.FETCH_PRODUCT_SUCCESS
   ));
 });
@@ -23,7 +23,7 @@ export const getProductById = asyncHandler(async (req, res) => {
 // Create new product
 export const createProduct = asyncHandler(async (req, res) => {
   res.status(HTTP_STATUS.CREATED).json(buildResponse(
-      await productService.createProduct(req.user.id, req.body),
+      await productService.createProduct(req.user, req.body),
       MESSAGES.PRODUCT.CREATE_SUCCESS
   ));
 });
@@ -31,7 +31,7 @@ export const createProduct = asyncHandler(async (req, res) => {
 // Update product details
 export const updateProductDetails = asyncHandler(async (req, res) => {
   res.status(HTTP_STATUS.OK).json(buildResponse(
-      await productService.updateProduct(req.user.id, req.params.productId, req.body),
+      await productService.updateProduct(req.user, req.params.productId, req.body),
       MESSAGES.PRODUCT.UPDATE_SUCCESS
   ));
 });
@@ -39,7 +39,7 @@ export const updateProductDetails = asyncHandler(async (req, res) => {
 // Set product to out of stock
 export const setProductToOutOfStock = asyncHandler(async (req, res) => {
   res.status(HTTP_STATUS.OK).json(buildResponse(
-      await productService.updateProduct(req.user.id, req.params.productId, { status: 'out_of_stock' }),
+      await productService.updateProduct(req.user, req.params.productId, { status: 'out_of_stock' }),
       MESSAGES.PRODUCT.OUT_OF_STOCK_SUCCESS
   ));
 });
@@ -47,7 +47,7 @@ export const setProductToOutOfStock = asyncHandler(async (req, res) => {
 // Set product to in stock
 export const setProductToInStock = asyncHandler(async (req, res) => {
   res.status(HTTP_STATUS.OK).json(buildResponse(
-      await productService.updateProduct(req.user.id, req.params.productId, { status: 'in_stock' }),
+      await productService.updateProduct(req.user, req.params.productId, { status: 'in_stock' }),
       MESSAGES.PRODUCT.IN_STOCK_SUCCESS
   ));
 });
@@ -55,7 +55,7 @@ export const setProductToInStock = asyncHandler(async (req, res) => {
 // Discontinue product
 export const discontinueProduct = asyncHandler(async (req, res) => {
   res.status(HTTP_STATUS.OK).json(buildResponse(
-      await productService.updateProduct(req.user.id, req.params.productId, { status: 'discontinued' }),
+      await productService.updateProduct(req.user, req.params.productId, { status: 'discontinued' }),
       MESSAGES.PRODUCT.DISCONTINUE_SUCCESS
   ));
 });
@@ -63,7 +63,7 @@ export const discontinueProduct = asyncHandler(async (req, res) => {
 // Soft-delete product
 export const deleteProduct = asyncHandler(async (req, res) => {
   res.status(HTTP_STATUS.OK).json(buildResponse(
-      await productService.updateProduct(req.user.id, req.params.productId, { isDeleted: true }),
+      await productService.updateProduct(req.user, req.params.productId, { isDeleted: true }),
       MESSAGES.PRODUCT.DELETE_SUCCESS
   ));
 });
@@ -71,7 +71,7 @@ export const deleteProduct = asyncHandler(async (req, res) => {
 // Restore soft-deleted product
 export const restoreProduct = asyncHandler(async (req, res) => {
   res.status(HTTP_STATUS.OK).json(buildResponse(
-      await productService.updateProduct(req.user.id, req.params.productId, { isDeleted: false }),
+      await productService.updateProduct(req.user, req.params.productId, { isDeleted: false }),
       MESSAGES.PRODUCT.RESTORE_SUCCESS
   ));
 });

@@ -4,19 +4,19 @@ export const ROLES = {
   PRODUCT_MANAGER: 'product_manager',
   ORDER_MANAGER: 'order_manager',
   USER_MANAGER: 'user_manager',
-  USER: 'user',
-  ALL_ADMINS: 'admins_profile_update',
-  VIEW_ONLY_ADMIN: 'view_only_admin'
+  VIEW_ONLY_ADMIN: 'view_only_admin',
+  USER: 'user'
 };
 
 export const ROLE_HIERARCHY = {
   general_admin: [
     ROLES.GENERAL_ADMIN, ROLES.PRODUCT_MANAGER,
-    ROLES.ORDER_MANAGER, ROLES.USER_MANAGER, ROLES.USER, ROLES.ALL_ADMINS
+    ROLES.ORDER_MANAGER, ROLES.USER_MANAGER, ROLES.VIEW_ONLY_ADMIN
   ],
-  product_manager: [ROLES.PRODUCT_MANAGER, ROLES.USER, ROLES.ALL_ADMINS],
-  order_manager: [ROLES.ORDER_MANAGER, ROLES.USER, ROLES.ALL_ADMINS],
-  user_manager: [ROLES.USER_MANAGER, ROLES.USER, ROLES.ALL_ADMINS]
+  product_manager: [ROLES.PRODUCT_MANAGER, ROLES.VIEW_ONLY_ADMIN],
+  order_manager: [ROLES.ORDER_MANAGER, ROLES.VIEW_ONLY_ADMIN],
+  user_manager: [ROLES.USER_MANAGER, ROLES.VIEW_ONLY_ADMIN],
+  view_only_admin: [ROLES.VIEW_ONLY_ADMIN]
 };
 
 export const FIELDS_TO_REMOVE = {

@@ -5,13 +5,17 @@ import * as orderController from '../../controllers/admins/order.controller.js';
 
 const router = Router();
 
-// Apply authentication and role check for all routes below
+// Everyone authenticated
 router.use(authenticate);
+
+// READ (all admins)
+router.get('/', requireRole(ROLES.VIEW_ONLY_ADMIN), orderController.getAllOrders);
+router.get('/user/:userId', requireRole(ROLES.VIEW_ONLY_ADMIN), orderController.getAllUserOrders);
+router.get('/:orderId', requireRole(ROLES.VIEW_ONLY_ADMIN), orderController.getOrderByOrderId);
+
+// WRITE (only order manager or higher roles)
 router.use(requireRole(ROLES.ORDER_MANAGER));
 
-router.get('/', orderController.getAllOrders);
-router.get('/user/:userId', orderController.getAllUserOrders);
-router.get('/:orderId', orderController.getOrderByOrderId);
 router.put('/:orderId/status', orderController.updateOrderStatus);
 
 export default router;

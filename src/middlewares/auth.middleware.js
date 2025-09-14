@@ -1,11 +1,8 @@
-import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
 import { ROLES, ROLE_HIERARCHY } from '../constants/roles.constant.js';
+import { verifyToken } from '../utils/jwt.util.js';
 import { ensureUserIsActive } from '../utils/validators/auth-validators.util.js';
 import { findUserById } from '../models/user.model.js';
 import { findAdminById } from '../models/admins/admin.model.js';
-
-dotenv.config();
 
 /**
  * Auth middleware: verifies JWT and sets req.user
@@ -24,7 +21,7 @@ export const authenticate = async (req, res, next) => {
   const token = authHeader.split(' ')[1];
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = verifyToken(token);
     if (!decoded.id || !decoded.role) throw new Error('Invalid token payload');
 
     // Fetch user/admin based on role
@@ -59,20 +56,18 @@ export const authenticate = async (req, res, next) => {
 export const requireRole = (requiredRole) => {
   return (req, res, next) => {
     const { role, name, id, email } = req.user;
-
     // Super admin always bypasses
     if (role === ROLES.SUPER_ADMIN) return next();
-
-    // View-only admin cannot access
-    if (role === ROLES.VIEW_ONLY_ADMIN) {
-      return res.status(403).json({ message: 'Access denied. View only role.' });
-    }
-
     // Check if role has access
     const allowedRoles = ROLE_HIERARCHY[role] || [];
     if (!allowedRoles.includes(requiredRole)) {
-      console.log('Unauthorized access attempt by:', { name, id, email, role });
-      return res.status(403).json({ message: 'Access denied. Route forbidden.' });
+      console.log('Melicious route access attempt by:', { name, id, email, role });
+      return res.status(403).json({
+        success: false,
+        data: null,
+        message: 'Access denied. Route access forbidden.',
+        code: 'FORBIDDEN_ROUTE',
+      });
     }
 
     next();
