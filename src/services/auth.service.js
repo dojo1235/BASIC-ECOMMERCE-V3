@@ -31,6 +31,5 @@ export const loginUser = async (payload) => {
   if (user.role === ROLES.USER)
     await userModel.updateUser(user.id, { last_login: new Date() });
   const token = generateToken({ id: user.id, role: user.role });
-  console.log('TOKEN:', token);
   return { token, user: sanitizeForPublic(user) };
 };

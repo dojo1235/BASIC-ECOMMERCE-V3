@@ -33,8 +33,7 @@ const attachOrderItems = async (orders) => {
 // Build filters for orders
 const buildOrderFilters = (search, filters = {}) => {
   let { where, params } = buildFilters(search, filters);
-  // always exclude deleted
-  where += (where ? ' AND' : ' WHERE') + ' o.is_deleted = FALSE';
+  
   if (filters.status) {
     where += ' AND o.status = ?';
     params.push(filters.status);
@@ -118,7 +117,7 @@ export const getOrderByOrderId = async (orderId) => {
       u.email AS user_email
     FROM orders o
     JOIN users u ON o.user_id = u.id
-    WHERE o.id = ? AND o.is_deleted = FALSE
+    WHERE o.id = ?
   `;
   const [rows] = await db.query(sql, [orderId]);
   if (!rows[0]) return null;
@@ -132,8 +131,30 @@ export const updateOrderStatus = async (adminId, orderId, status) => {
   const [result] = await db.query(
     `UPDATE orders 
      SET status = ?, updated_by = ?, updated_at = CURRENT_TIMESTAMP
-     WHERE id = ? AND is_deleted = FALSE`,
+     WHERE id = ?`,
     [status, adminId, orderId]
   );
-  return result.affectedRows;
+  return result.affectedRows > 0;
+};
+
+// Soft delete order
+export const deleteOrder = async (adminId, orderId) => {
+  const [result] = await db.query(
+    `UPDATE orders 
+     SET is_deleted = 1, updated_by = ?, updated_at = CURRENT_TIMESTAMP
+     WHERE id = ?`,
+    [adminId, orderId]
+  );
+  return result.affectedRows > 0;
+};
+
+// Restore soft deleted order
+export const restoreOrder = async (adminId, orderId) => {
+  const [result] = await db.query(
+    `UPDATE orders 
+     SET is_deleted = 0, updated_by = ?, updated_at = CURRENT_TIMESTAMP
+     WHERE id = ?`,
+    [adminId, orderId]
+  );
+  return result.affectedRows > 0;
 };

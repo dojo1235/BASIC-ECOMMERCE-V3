@@ -10,12 +10,14 @@ router.use(authenticate);
 
 // READ (all admins)
 router.get('/', requireRole(ROLES.VIEW_ONLY_ADMIN), orderController.getAllOrders);
-router.get('/user/:userId', requireRole(ROLES.VIEW_ONLY_ADMIN), orderController.getAllUserOrders);
+router.get('/users/:userId', requireRole(ROLES.VIEW_ONLY_ADMIN), orderController.getAllUserOrders);
 router.get('/:orderId', requireRole(ROLES.VIEW_ONLY_ADMIN), orderController.getOrderByOrderId);
 
 // WRITE (only order manager or higher roles)
 router.use(requireRole(ROLES.ORDER_MANAGER));
 
 router.put('/:orderId/status', orderController.updateOrderStatus);
+router.put('/:orderId/restore', orderController.restoreOrder);
+router.delete('/:orderId', orderController.deleteOrder);
 
 export default router;

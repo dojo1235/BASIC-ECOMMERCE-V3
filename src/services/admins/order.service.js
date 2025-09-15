@@ -31,3 +31,19 @@ export const updateOrderStatus = async (admin, orderId, status) => {
   const updatedOrder = await orderModel.getOrderByOrderId(orderId);
   return { order: sanitizeByRole(admin, updatedOrder) };
 };
+
+// Soft delete order
+export const deleteOrder = async (admin, orderId) => {
+  ensureOrderIsFound(await orderModel.getOrderByOrderId(orderId));
+  await orderModel.deleteOrder(admin.id, orderId);
+  const updatedOrder = await orderModel.getOrderByOrderId(orderId);
+  return { order: sanitizeByRole(admin, updatedOrder) };
+};
+
+// Restore soft-deleted order
+export const restoreOrder = async (admin, orderId) => {
+  ensureOrderIsFound(await orderModel.getOrderByOrderId(orderId));
+  await orderModel.restoreOrder(admin.id, orderId);
+  const updatedOrder = await orderModel.getOrderByOrderId(orderId);
+  return { order: sanitizeByRole(admin, updatedOrder) };
+};

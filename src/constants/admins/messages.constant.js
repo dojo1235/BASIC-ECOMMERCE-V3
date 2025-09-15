@@ -41,8 +41,12 @@ export const MESSAGES = {
     NOT_FOUND: 'Product not found.'
   },
   ORDER: {
-    STATUS_UPDATED: 'Order status updated.',
-    NOT_FOUND: 'Order not found.'
+    FETCH_ORDERS_SUCCESS: 'Orders fetched successfully.',
+    FETCH_ORDER_SUCCESS: 'Order fetched successfully.',
+    FETCH_USER_ORDERS_SUCCESS: 'User orders fetched successfully.',
+    STATUS_UPDATE_SUCCESS: 'Order status updated successfully.',
+    DELETE_SUCCESS: 'Order deleted successfully.',
+    RESTORE_SUCCESS: 'Order restored successfully.'
   },
   REVIEW: {
     FETCH_PRODUCT_REVIEWS_SUCCESS: 'Product reviews fetched successfully',

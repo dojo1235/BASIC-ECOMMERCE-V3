@@ -35,3 +35,19 @@ export const updateOrderStatus = asyncHandler(async (req, res) => {
       MESSAGES.ORDER.STATUS_UPDATE_SUCCESS
   ));
 });
+
+// Soft-Delete order
+export const deleteOrder = asyncHandler(async (req, res) => {
+  res.status(HTTP_STATUS.OK).json(buildResponse(
+      await orderService.deleteOrder(req.user, req.params.orderId),
+      MESSAGES.ORDER.DELETE_SUCCESS
+  ));
+});
+
+// Restore Soft-Deleted order
+export const restoreOrder = asyncHandler(async (req, res) => {
+  res.status(HTTP_STATUS.OK).json(buildResponse(
+      await orderService.restoreOrder(req.user, req.params.orderId),
+      MESSAGES.ORDER.RESTORE_SUCCESS
+  ));
+});
