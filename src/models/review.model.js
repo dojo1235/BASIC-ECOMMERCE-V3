@@ -4,7 +4,7 @@ import { getPagination } from '../utils/query.util.js';
 // Get single user review by user ID & product ID
 export const getReviewByUserAndProductId = async (userId, productId) => {
   const [rows] = await db.query(
-    'SELECT * FROM reviews WHERE product_id = ? AND user_id = ?',
+    'SELECT * FROM reviews WHERE product_id = ? AND user_id = ? AND is_visible = TRUE',
     [productId, userId]
   );
   return rows[0] || null
@@ -38,6 +38,7 @@ export const getReviewsByProductId = async (productId, { page = 1, pageSize = 10
   const [rows] = await db.query(
     `SELECT 
         r.id,
+        r.product_id,
         r.rating,
         r.comment,
         r.created_at,

@@ -8,9 +8,11 @@ export const getAllReviewsByProductId = async (productId, { page = 1, pageSize =
   const [rows] = await db.query(
     `SELECT 
         r.id,
+        r.product_id,
         r.rating,
         r.comment,
         r.is_visible,
+        r.updated_by,
         r.created_at,
         r.updated_at,
         u.id AS user_id,
@@ -51,6 +53,7 @@ export const getReviewById = async (reviewId) => {
         r.rating,
         r.comment,
         r.is_visible,
+        r.updated_by,
         r.created_at,
         r.updated_at,
         u.id AS user_id,
@@ -64,13 +67,24 @@ export const getReviewById = async (reviewId) => {
   return rows[0] || null;
 };
 
-// Hide (soft-delete) a review (admin action)
-export const hideReview = async (reviewId) => {
+// Hide a review (admin action)
+export const hideReview = async (adminId, reviewId) => {
   const [result] = await db.query(
     `UPDATE reviews
-     SET is_visible = FALSE, updated_at = CURRENT_TIMESTAMP
+     SET is_visible = FALSE, updated_by = ?, updated_at = NOW()
      WHERE id = ?`,
-    [reviewId]
+    [adminId, reviewId]
+  );
+  return result.affectedRows > 0;
+};
+
+// Restore hidden review
+export const restoreReview = async (adminId, reviewId) => {
+  const [result] = await db.query(
+    `UPDATE reviews
+     SET is_visible = TRUE, updated_by = ?, updated_at = NOW()
+     WHERE id = ?`,
+    [adminId, reviewId]
   );
   return result.affectedRows > 0;
 };

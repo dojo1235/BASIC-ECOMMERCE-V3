@@ -18,10 +18,18 @@ export const getReviewById = async (admin, reviewId) => {
   return { review: sanitizeByRole(admin, review) };
 };
 
-// Hide review (Dojo: forgot to put updated by)
+// Hide review
 export const hideReview = async (admin, reviewId) => {
   ensureReviewIsFound(await reviewModel.getReviewById(reviewId));
-  await reviewModel.hideReview(reviewId);
+  await reviewModel.hideReview(admin.id, reviewId);
+  const updatedReview = await reviewModel.getReviewById(reviewId);
+  return { review: sanitizeByRole(admin, updatedReview) };
+};
+
+// Restore hidden review
+export const restoreReview = async (admin, reviewId) => {
+  ensureReviewIsFound(await reviewModel.getReviewById(reviewId));
+  await reviewModel.restoreReview(admin.id, reviewId);
   const updatedReview = await reviewModel.getReviewById(reviewId);
   return { review: sanitizeByRole(admin, updatedReview) };
 };

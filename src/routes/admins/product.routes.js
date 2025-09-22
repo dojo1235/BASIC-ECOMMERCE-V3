@@ -29,5 +29,6 @@ router.put('/:productId/restore', productController.restoreProduct);
 router.delete('/:productId', productController.deleteProduct);
 
 router.put('/reviews/:reviewId/hide', reviewController.hideReview);
+router.put('/reviews/:reviewId/restore', reviewController.restoreReview);
 
 export default router;

@@ -59,7 +59,12 @@ The system supports both **regular users** and **admin users**, with role-based 
 
 ## Project Structure
 
-controllers/  -> Handles HTTP requests and responses services/     -> Business logic for different modules models/       -> Database interactions and schemas routes/       -> API endpoint definitions tests/        -> Unit and E2E tests server.js     -> Entry point for the backend
+controllers/  -> Handles HTTP requests and responses
+services/     -> Business logic for different modules
+models/       -> Database interactions and schemas
+routes/       -> API endpoint definitions
+tests/        -> E2E test
+server.js     -> Entry point for the backend
 
 ---
 
@@ -84,25 +89,113 @@ The system uses role-based access, with admins having extended permissions.
 Each module is self-contained and extendable for future features like search, filtering, or reporting.
 
 
+## Database Seeding
+
+This project comes with two seed files to make setup and testing easier.
+
+### 1. `seed.sql` (Full Seed)
+- Inserts:
+  - Admin accounts (Super Admin + other roles)
+  - Sample users
+  - Sample products
+- **Use case:** For quick Postman or manual API testing where you want ready-made data.
+
+> Example Super Admin plaintext password: `SuperAdminPassword123#`
 
 ---
 
-License
+### 2. `super-admin-seed.sql` (Minimal Seed)
+- Inserts **only the Super Admin** account.
+- **Use case:** For automated E2E tests or fresh environments where tests create their own data.
+- Keeps dependencies minimal → once the Super Admin is seeded, you’re ready to run tests.
 
-ISC License – created by BRIGGS DIVINE TOBIN
+---
+
+### Usage
+From inside your MariaDB/MySQL shell:
+```sql
+SOURCE seed.sql;
+
+Or for the minimal seed:
+
+SOURCE super-admin-seed.sql;
+
+
+---
+
+Tip: Run only one of these depending on your workflow:
+
+Full playground: seed.sql
+
+Clean E2E tests: super-admin-seed.sql
 
 
 
+## Seeded Account Pattern
+
+All seeded accounts (admins and users) follow a consistent, predictable pattern for testing:
+
+- **Email:** fullname@example.com  
+- **Password:** FullNamePassword123#
+
+Examples:
+
+| Role/User          | Email                     | Password                  |
+|--------------------|---------------------------|---------------------------|
+| Super Admin        | superadmin@example.com    | SuperAdminPassword123#    |
+| General Admin      | generaladmin@example.com  | GeneralAdminPassword123#  |
+| User Manager       | usermanager@example.com   | UserManagerPassword123#   |
+| Product Manager    | productmanager@example.com| ProductManagerPassword123#|
+| Order Manager      | ordermanager@example.com  | OrderManagerPassword123#  |
+| View Only Admin    | viewonlyadmin@example.com | ViewOnlyAdminPassword123# |
+| Divine (user)      | divine@example.com        | DivinePassword123#        |
+| Tobin (user)       | tobin@example.com         | TobinPassword123#         |
+| Briggs (user)      | briggs@example.com        | BriggsPassword123#        |
+
+All passwords are pre-hashed in the database. This pattern is purely for educational and testing purposes, making it easy to login during Postman tests or local development.
+
+---
 
 
-src/services/auth.service.js replacement to create a super admin through the normal register means.
+LICENSE
+
+This project is released under the **Premium Educational License (PEL)**.
+
+### You are allowed to:
+- ✅ Clone this repository  
+- ✅ Use it for **personal learning, testing, or educational purposes**  
+- ✅ Run and explore the project locally  
+
+### You are **not** allowed to:
+- ❌ Modify the source code for redistribution  
+- ❌ Redistribute or publish this code as your own
+- ❌ Use it for commercial purposes  
+
+For full details, see the [LICENSE](./LICENSE) file.
+
+
+**Unlock The Full Potential**
+
+The full potential of the system is intentionally left for exploration. The visible features of this system are only the beginning. Beneath the surface lies a collection of **premium capabilities, elegant workflows, and hidden patterns** that only the author fully understands.
+
+You’re welcome to poke around, explore, and experiment with what you can — but the true power is intentionally concealed. Those who dig deeper will discover the system’s full potential.
+
+To unlock all **baked-in features**, reach out to the author directly.
+
+
+CREATED BY: **BRIGGS DIVINE TOBIN**
+EMAIL: **dojo10295@gmail.com**
+
+
+
+src/services/auth.service.js replacement to create a super admin through the normal register means if needed.
+Or use the seeded super admin to create other super admins if already seeded.
 
 import { ALLOWED_FIELDS, ROLES } from '../constants/index.js';
 import { mapAllowedFields } from '../utils/field-mapper.util.js';
 import { ensureUserIsActive, ensurePasswordIsCorrect } from '../utils/validators/auth-validators.util.js';
 import { hashPassword, comparePassword } from '../utils/password.util.js';
 import { generateToken } from '../utils/jwt.util.js';
-import { AppError } from '../utils/app-error.js';
 import { ensureEmailIsUnique } from './shared/email.service.js';
 import { findAdminByEmail, updateAdmin } from '../models/admins/admin.model.js';
 import { createAdmin, findAdminById } from '../models/admins/super-admin.model.js';

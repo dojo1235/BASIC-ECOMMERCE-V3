@@ -51,7 +51,8 @@ export const MESSAGES = {
   REVIEW: {
     FETCH_PRODUCT_REVIEWS_SUCCESS: 'Product reviews fetched successfully',
     FETCH_SUCCESS: 'Review fetched successfully.',
-    HIDE_SUCCESS: 'Review hidden successfully'
+    HIDE_SUCCESS: 'Review hidden successfully',
+    RESTORE_SUCCESS: 'Review restored successfully.'
   },
   GENERAL: {
     FORBIDDEN: 'FORBIDDEN',

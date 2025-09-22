@@ -27,3 +27,11 @@ export const hideReview = asyncHandler(async (req, res) => {
     MESSAGES.REVIEW.HIDE_SUCCESS
   ));
 });
+
+// Restore review from users
+export const restoreReview = asyncHandler(async (req, res) => {
+  res.status(HTTP_STATUS.OK).json(buildResponse(
+    await reviewService.restoreReview(req.user, req.params.reviewId),
+    MESSAGES.REVIEW.RESTORE_SUCCESS
+  ));
+});
