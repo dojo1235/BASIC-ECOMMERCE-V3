@@ -3,18 +3,18 @@ export const errorHandler = (err, req, res, next) => {
   if (
     err instanceof SyntaxError &&
     err.status === 400 &&
-    "body" in err
+    'body' in err
   ) {
     return res.status(400).json({
       success: false,
       data: null,
-      message: "Invalid JSON format.",
-      code: "BAD_REQUEST",
+      message: 'Invalid JSON format.',
+      code: 'BAD_REQUEST',
     });
   }
 
   // Handle custom AppError
-  if (err.name === "AppError") {
+  if (err.name === 'AppError') {
     return res.status(err.statusCode).json({
       success: false,
       data: null,
@@ -28,7 +28,7 @@ export const errorHandler = (err, req, res, next) => {
   return res.status(500).json({
     success: false,
     data: null,
-    message: "Internal server error",
-    code: "INTERNAL_ERROR",
+    message: 'Internal server error',
+    code: 'INTERNAL_ERROR',
   });
 };

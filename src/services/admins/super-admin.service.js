@@ -1,9 +1,9 @@
 import { ALLOWED_FIELDS } from '../../constants/admins/index.js';
 import { mapAllowedFields } from '../../utils/field-mapper.util.js';
-import { ensureAdminIsFound } from '../../utils/validators/admins/admin-validators.util.js';
+import { ensureAdminIsFound, ensureRoleIsValid } from '../../utils/validators/admins/admin-validators.util.js';
 import { hashPassword } from '../../utils/password.util.js';
 import { sanitizeForSuperAdmin } from '../../utils/sanitize.util.js';
-import { ensureEmailIsUnique } from '../shared/email.service.js';
+import { validateAndEnsureEmailIsUnique } from '../shared/email.service.js';
 import * as superAdminModel from '../../models/admins/super-admin.model.js';
 
 // Get all admins with search, filters & pagination (super admin)
@@ -22,7 +22,9 @@ export const getAdminById = async (adminId) => {
 // Create new admin (super admin)
 export const createAdmin = async (superId, payload) => {
   const filteredData = mapAllowedFields(payload, ALLOWED_FIELDS.SUPER_ADMIN.CREATE);
-  await ensureEmailIsUnique(filteredData.email);
+  filteredData.email = await validateAndEnsureEmailIsUnique(filteredData.email);
+  if ('role' in filteredData)
+    ensureRoleIsValid(filteredData.role);
   filteredData.created_by = superId;
   filteredData.password = await hashPassword(filteredData.password);
   const adminId = await superAdminModel.createAdmin(filteredData);
@@ -37,10 +39,12 @@ export const updateAdmin = async (superId, adminId, updates) => {
   ensureAdminIsFound(admin);
   filteredData.updated_by = superId;
   filteredData.updated_at = new Date();
-  if (filteredData.email)
-    await ensureEmailIsUnique(filteredData.email);
-  if (filteredData.password)
+  if ('email' in filteredData)
+    filteredData.email = await validateAndEnsureEmailIsUnique(filteredData.email);
+  if ('password' in filteredData)
     filteredData.password = await hashPassword(filteredData.password);
+  if ('role' in filteredData)
+    ensureRoleIsValid(filteredData.role);
   await superAdminModel.updateAdmin(adminId, filteredData);
   const updatedAdmin = await superAdminModel.findAdminById(adminId);
   return { admin: sanitizeForSuperAdmin(updatedAdmin) };

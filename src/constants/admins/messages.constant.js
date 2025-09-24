@@ -4,6 +4,7 @@ export const MESSAGES = {
     FETCH_ADMIN_SUCCESS: 'Admin fetched successfully.',
     CREATE_ADMIN_SUCCESS: 'Admin created successfully.',
     UPDATE_ADMIN_SUCCESS: 'Admin Updated successfully.',
+    UPDATE_ADMIN_PASSWORD_SUCCESS: 'Admin password updated successfully.',
     ADMIN_ROLE_UPDATE_SUCCESS: 'Admin role changed successfully.',
     BAN_ADMIN_SUCCESS: 'Admin banned successfully.',
     UNBAN_ADMIN_SUCCESS: 'Admin banned is restored successfully.',
@@ -14,15 +15,18 @@ export const MESSAGES = {
   ADMIN: {
     FETCH_SUCCESS: 'Fetched successfully.',
     UPDATE_SUCCESS: 'Updated successfully.',
+    UPDATE_PASSWORD_SUCCESS: 'Password updated successfully.',
     FETCH_USERS_SUCCESS: 'Users fetched successfully.',
     FETCH_USER_SUCCESS: 'User fetched successfully.',
     UPDATE_USER_SUCCESS: 'User Updated successfully.',
+    UPDATE_USER_PASSWORD_SUCCESS: 'User password updated successfully.',
     BAN_USER_SUCCESS: 'User banned successfully.',
     UNBAN_USER_SUCCESS: 'User banned is restored successfully.',
     DELETE_USER_SUCCESS: 'User Deleted successfully.',
     RESTORE_USER_SUCCESS: 'User deleted is restored successfully.',
     COUNT_USERS_SUCCESS: 'Users counted successfully.',
-    NOT_FOUND: 'Admin not found.'
+    NOT_FOUND: 'Admin not found.',
+    INVALID_ROLE: 'Invalid role.'
   },
   USER: {
     NOT_FOUND: 'User not found.'

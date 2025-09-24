@@ -14,6 +14,7 @@ router.get('/count/all', superAdminController.countAdmins);
 router.get('/:adminId', superAdminController.getAdminById);
 router.post('/', superAdminController.createAdmin);
 router.put('/:adminId', superAdminController.updateAdminDetails);
+router.put('/:adminId/password', superAdminController.updateAdminPassword);
 router.put('/:adminId/role', superAdminController.updateAdminRole);
 router.put('/:adminId/ban', superAdminController.banAdmin);
 router.put('/:adminId/unban', superAdminController.unbanAdmin);

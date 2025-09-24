@@ -11,5 +11,6 @@ router.use(requireRole(ROLES.VIEW_ONLY_ADMIN));
 
 router.get('/', adminController.getAdminById);
 router.put('/', adminController.updateAdminDetails);
+router.put('/password', adminController.updateAdminPassword);
 
 export default router;

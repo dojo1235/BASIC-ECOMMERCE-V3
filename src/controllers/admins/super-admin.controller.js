@@ -36,6 +36,14 @@ export const updateAdminDetails = asyncHandler(async (req, res) => {
   ));
 });
 
+// Update admin password (super admin)
+export const updateAdminPassword = asyncHandler(async (req, res) => {
+  res.status(HTTP_STATUS.OK).json(buildResponse(
+      await superAdminService.updateAdmin(req.user.id, req.params.adminId, req.body),
+      MESSAGES.SUPER_ADMIN.UPDATE_ADMIN_PASSWORD_SUCCESS
+  ));
+});
+
 // Change admin role (super admin)
 export const updateAdminRole = asyncHandler(async (req, res) => {
   res.status(HTTP_STATUS.OK).json(buildResponse(

@@ -3,7 +3,7 @@ import { mapAllowedFields } from '../../utils/field-mapper.util.js';
 import { ensureUserIsFound } from '../../utils/validators/admins/user-validators.util.js';
 import { hashPassword } from '../../utils/password.util.js';
 import { sanitizeByRole } from '../../utils/sanitize.util.js';
-import { ensureEmailIsUnique } from '../shared/email.service.js';
+import { validateAndEnsureEmailIsUnique } from '../shared/email.service.js';
 import * as userModel from '../../models/admins/user.model.js';
 
 // Get all users with search, filters & pagination
@@ -26,9 +26,9 @@ export const updateUser = async (admin, userId, updates) => {
   ensureUserIsFound(user);
   filteredData.updated_by = admin.id;
   filteredData.updated_at = new Date();
-  if (filteredData.email)
-    await ensureEmailIsUnique(filteredData.email);
-  if (filteredData.password)
+  if ('email' in filteredData)
+    filteredData.email = await validateAndEnsureEmailIsUnique(filteredData.email);
+  if ('password' in filteredData)
     filteredData.password = await hashPassword(filteredData.password);
   await userModel.updateUser(userId, filteredData);
   const updatedUser = await userModel.findUserById(userId);

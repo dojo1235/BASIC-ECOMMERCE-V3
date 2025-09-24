@@ -14,7 +14,15 @@ export const getUserById = asyncHandler(async (req, res) => {
 // Update user details
 export const updateUserDetails = asyncHandler(async (req, res) => {
   res.status(HTTP_STATUS.OK).json(buildResponse(
-      await userService.updateUser(req.user.id, req.body),
+      await userService.updateUserDetails(req.user.id, req.body),
       MESSAGES.USER.UPDATE_SUCCESS
+  ));
+});
+
+// Update user password
+export const updateUserPassword = asyncHandler(async (req, res) => {
+  res.status(HTTP_STATUS.OK).json(buildResponse(
+      await userService.updateUserPassword(req.user.id, req.body),
+      MESSAGES.USER.UPDATE_PASSWORD_SUCCESS
   ));
 });

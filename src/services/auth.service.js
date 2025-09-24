@@ -4,14 +4,14 @@ import { ensureUserIsActive, ensurePasswordIsCorrect } from '../utils/validators
 import { hashPassword, comparePassword } from '../utils/password.util.js';
 import { generateToken } from '../utils/jwt.util.js';
 import { sanitizeForPublic } from '../utils/sanitize.util.js';
-import { ensureEmailIsUnique } from './shared/email.service.js';
+import { validateAndEnsureEmailIsUnique } from './shared/email.service.js';
 import { findAdminByEmail, updateAdmin } from '../models/admins/admin.model.js';
 import * as userModel from '../models/user.model.js';
 
 // Register new user
 export const registerUser = async (payload) => {
   const filteredData = mapAllowedFields(payload, ALLOWED_FIELDS.AUTH.CREATE);
-  await ensureEmailIsUnique(filteredData.email);
+  filteredData.email = await validateAndEnsureEmailIsUnique(filteredData.email);
   filteredData.password = await hashPassword(filteredData.password);
   filteredData.role = ROLES.USER;
   const userId = await userModel.createUser(filteredData);
@@ -22,7 +22,8 @@ export const registerUser = async (payload) => {
 
 // Login existing user
 export const loginUser = async (payload) => {
-  const { email, password } = payload;
+  let { email, password } = payload;
+  email = email.trim().toLowerCase();
   const user = await userModel.findUserByEmail(email) || await findAdminByEmail(email);
   ensureUserIsActive(user);
   ensurePasswordIsCorrect(await comparePassword(password, user.password));

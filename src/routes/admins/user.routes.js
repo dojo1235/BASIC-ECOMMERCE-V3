@@ -17,6 +17,7 @@ router.get('/:userId', requireRole(ROLES.VIEW_ONLY_ADMIN), userController.getUse
 router.use(requireRole(ROLES.USER_MANAGER));
 
 router.put('/:userId', userController.updateUserDetails);
+router.put('/:userId/password', userController.updateUserPassword);
 router.put('/:userId/ban', userController.banUser);
 router.put('/:userId/unban', userController.unbanUser);
 router.put('/:userId/restore', userController.restoreUser);

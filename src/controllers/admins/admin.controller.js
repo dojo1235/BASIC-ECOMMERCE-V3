@@ -2,7 +2,7 @@ import { MESSAGES } from '../../constants/admins/index.js';
 import { HTTP_STATUS } from '../../constants/index.js';
 import { asyncHandler } from '../../middlewares/async-handler.middleware.js';
 import { buildResponse } from '../../utils/response.util.js';
-import * as adminService from "../../services/admins/admin.service.js";
+import * as adminService from '../../services/admins/admin.service.js';
 
 // Get single admin
 export const getAdminById = asyncHandler(async (req, res) => {
@@ -15,7 +15,15 @@ export const getAdminById = asyncHandler(async (req, res) => {
 // Update admin details
 export const updateAdminDetails = asyncHandler(async (req, res) => {
   res.status(HTTP_STATUS.OK).json(buildResponse(
-      await adminService.updateAdmin(req.user.id, req.body),
+      await adminService.updateAdminDetails(req.user.id, req.body),
       MESSAGES.ADMIN.UPDATE_SUCCESS
+  ));
+});
+
+// Update admin password
+export const updateAdminPassword = asyncHandler(async (req, res) => {
+  res.status(HTTP_STATUS.OK).json(buildResponse(
+      await adminService.updateAdminPassword(req.user.id, req.body),
+      MESSAGES.ADMIN.UPDATE_PASSWORD_SUCCESS
   ));
 });

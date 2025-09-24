@@ -1,7 +1,8 @@
 export const ERROR_CODES = {
   ADMIN: {
     EMAIL_IN_USE: 'CONFLICT',
-    NOT_FOUND: 'NOT_FOUND'
+    NOT_FOUND: 'NOT_FOUND',
+    INVALID_ROLE: 'BAD_REQUEST'
   },
   USER: {
     NOT_FOUND: 'NOT_FOUND'

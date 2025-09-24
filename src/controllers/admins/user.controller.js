@@ -28,6 +28,14 @@ export const updateUserDetails = asyncHandler(async (req, res) => {
   ));
 });
 
+// Update user password
+export const updateUserPassword = asyncHandler(async (req, res) => {
+  res.status(HTTP_STATUS.OK).json(buildResponse(
+      await userService.updateUser(req.user, req.params.userId, req.body),
+      MESSAGES.ADMIN.UPDATE_USER_PASSWORD_SUCCESS
+  ));
+});
+
 // Ban users
 export const banUser = asyncHandler(async (req, res) => {
   res.status(HTTP_STATUS.OK).json(buildResponse(

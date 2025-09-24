@@ -56,11 +56,23 @@ describe('[E2E] User API', () => {
       expect(res.status).toBe(HTTP_STATUS.CONFLICT);
       expect(res.body.message).toMatch(MESSAGES.AUTH.EMAIL_IN_USE);
     });
+    
+    it('should fail updating email to one that already exists regardless of email casing', async () => {
+      const res = await userHelper.updateUserDetails({ userToken, email: NEW_USER_EMAIL.toUpperCase() });
+      expect(res.status).toBe(HTTP_STATUS.CONFLICT);
+      expect(res.body.message).toMatch(MESSAGES.AUTH.EMAIL_IN_USE);
+    });
 
     it('should update user password', async () => {
-      const res = await userHelper.updateUserDetails({ userToken, password: NEW_USER_PASSWORD });
+      const res = await userHelper.updateUserPassword(userToken, DEFAULT_TEST_USER.password, NEW_USER_PASSWORD);
       expect(res.status).toBe(HTTP_STATUS.OK);
-      expect(res.body.message).toMatch(MESSAGES.USER.UPDATE_SUCCESS);
+      expect(res.body.message).toMatch(MESSAGES.USER.UPDATE_PASSWORD_SUCCESS);
+    });
+    
+    it('should fail updating user password when old password is incorrect', async () => {
+      const res = await userHelper.updateUserPassword(userToken, DEFAULT_TEST_USER.password, NEW_USER_PASSWORD);
+      expect(res.status).toBe(HTTP_STATUS.UNAUTHORIZED);
+      expect(res.body.message).toMatch(MESSAGES.USER.INVALID_OLD_PASSWORD);
     });
   });
 

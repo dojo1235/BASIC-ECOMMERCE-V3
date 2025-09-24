@@ -30,3 +30,14 @@ export const updateUserDetails = async (overrides = {}) => {
     .send(userData);
   return userRes;
 };
+
+/**
+ * Update user password
+ */
+ export const updateUserPassword = async (userToken, oldPassword, newPassword) => {
+   const userRes = await request(app)
+    .put('/api/users/me/password')
+    .set('Authorization', `Bearer ${userToken}`)
+    .send({ oldPassword, newPassword });
+  return userRes;
+ };

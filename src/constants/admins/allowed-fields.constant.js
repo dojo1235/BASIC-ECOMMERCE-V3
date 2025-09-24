@@ -18,8 +18,7 @@ export const ALLOWED_FIELDS = {
   ADMIN: {
     UPDATE: {
       name: 'name',
-      email: 'email',
-      password: 'password'
+      email: 'email'
     }
   },
   USER: {

@@ -9,5 +9,6 @@ router.use(authenticate);
 
 router.get('/', userController.getUserById);
 router.put('/', userController.updateUserDetails);
+router.put('/password', userController.updateUserPassword);
 
 export default router;

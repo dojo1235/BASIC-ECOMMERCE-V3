@@ -6,11 +6,29 @@ export const MESSAGES = {
     EMAIL_NOT_FOUND: 'Invalid credentials.',
     INVALID_PASSWORD: 'Invalid credentials.',
     USER_BANNED: 'Account banned.',
-    USER_DELETED: 'Account deleted.'
+    USER_DELETED: 'Account deleted.',
+    INVALID_AUTH_FORMAT: 'Invalid auth format. Authorization header and Bearer required.',
+    NO_TOKEN: 'Token not provided. Authentication required.',
+    INVALID_TOKEN_PAYLOAD: 'Invalid token payload.',
+    TOKEN_EXPIRED: 'Token expired.',
+    INVALID_TOKEN: 'Invalid token.',
+    ROUTE_ACCESS_DENIED: 'ACCESS DENIED! Route forbidden.',
+    EMAIL_MISSING: 'Email not provided.',
+    INVALID_EMAIL_FORMAT:'Invalid Email Format.'
   },
   USER: {
     FETCH_SUCCESS: 'User fetched successfully.',
-    UPDATE_SUCCESS: 'User updated successfully.'
+    UPDATE_SUCCESS: 'User updated successfully.',
+    UPDATE_PASSWORD_SUCCESS: 'Password updated successfully.',
+    OLD_PASSWORD_MISSING: 'Old password is required in order to update new password.',
+    PASSWORD_UNCHANGED: 'New password cannot be the same with old password.',
+    INVALID_OLD_PASSWORD: 'Old password is incorrect.',
+    PASSWORD_MISSING: 'New Passord cannot be empty.',
+    PASSWORD_TOO_SHORT: 'New password must be at least 6 characters long.',
+    PASSWORD_LOWERCASE_MISSING: 'New password must contain at least one lowercase letter.',
+    PASSWORD_UPPERCASE_MISSING: 'New password must contain at least one uppercase letter.',
+    PASSWORD_NUMBER_MISSING: 'New password must contain at least one number.',
+    PASSWORD_SPECIALCHAR_MISSING: 'New Password must contain at least one special character.'
   },
   PRODUCT: {
     FETCH_PRODUCTS_SUCCESS: 'Products fetched successfully.',

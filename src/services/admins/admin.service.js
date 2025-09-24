@@ -1,8 +1,8 @@
 import { ALLOWED_FIELDS } from '../../constants/admins/index.js';;
 import { mapAllowedFields } from '../../utils/field-mapper.util.js';
-import { hashPassword } from '../../utils/password.util.js';
+import { validateAndHashPassword } from '../../utils/validators/user-validators.util.js';
 import { sanitizeForAdmin } from '../../utils/sanitize.util.js';
-import { ensureEmailIsUnique } from '../shared/email.service.js';
+import { validateAndEnsureEmailIsUnique } from '../shared/email.service.js';
 import * as adminModel from '../../models/admins/admin.model.js';
 
 // Get single admin
@@ -12,15 +12,21 @@ export const getAdminById = async (adminId) => {
 };
 
 // Update admin details
-export const updateAdmin = async (adminId, updates) => {
+export const updateAdminDetails = async (adminId, updates) => {
   const filteredData = mapAllowedFields(updates, ALLOWED_FIELDS.ADMIN.UPDATE);
   filteredData.updated_by = adminId;
   filteredData.updated_at = new Date();
-  if (filteredData.email)
-    await ensureEmailIsUnique(filteredData.email);
-  if (filteredData.password)
-    filteredData.password = await hashPassword(filteredData.password);
+  if ('email' in filteredData)
+    filteredData.email = await validateAndEnsureEmailIsUnique(filteredData.email);
   await adminModel.updateAdmin(adminId, filteredData);
   const admin = await adminModel.findAdminById(adminId);
   return { admin: sanitizeForAdmin(admin) };
+};
+
+// Update admin password
+export const updateAdminPassword = async (adminId, payload) => {
+  const { oldPassword, newPassword } = payload;
+  const admin = await adminModel.findAdminById(adminId);
+  const hashedPassword = await validateAndHashPassword(oldPassword, newPassword, admin.password);
+  await adminModel.updateAdminPassword(adminId, hashedPassword);
 };

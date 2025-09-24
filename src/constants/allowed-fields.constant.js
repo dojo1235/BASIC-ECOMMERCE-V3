@@ -9,8 +9,7 @@ export const ALLOWED_FIELDS = {
   USER: {
     UPDATE: {
       name: 'name',
-      email: 'email',
-      password: 'password'
+      email: 'email'
     }
   },
 };

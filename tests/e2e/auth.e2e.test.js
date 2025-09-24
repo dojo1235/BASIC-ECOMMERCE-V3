@@ -19,8 +19,14 @@ describe('[E2E] Auth API', () => {
       expect(res.body.data.user).toHaveProperty('email', DEFAULT_TEST_USER.email);
     });
     
-    it('should fail to register with an existing user email', async () => {
+    it('should fail to register with an existing email', async () => {
       const res = await registerUser();
+      expect(res.status).toBe(HTTP_STATUS.CONFLICT);
+      expect(res.body.message).toMatch(MESSAGES.AUTH.EMAIL_IN_USE);
+    });
+    
+    it('should fail to register with an existing email regardless of email casing', async () => {
+      const res = await registerUser({ email: DEFAULT_TEST_USER.email.toUpperCase() });
       expect(res.status).toBe(HTTP_STATUS.CONFLICT);
       expect(res.body.message).toMatch(MESSAGES.AUTH.EMAIL_IN_USE);
     });
@@ -29,6 +35,14 @@ describe('[E2E] Auth API', () => {
   describe('POST /api/auth/login', () => {
     it('should login existing user and return JWT', async () => {
       const res = await loginUser({ email: DEFAULT_TEST_USER.email, password: DEFAULT_TEST_USER.password });
+      expect(res.status).toBe(HTTP_STATUS.OK);
+      expect(res.body.message).toMatch(MESSAGES.AUTH.LOGIN_SUCCESS);
+      expect(res.body.data).toHaveProperty('token');
+      expect(res.body.data.user).toHaveProperty('email', DEFAULT_TEST_USER.email);
+    });
+    
+    it('should login existing user and return JWT regardless of email casing', async () => {
+      const res = await loginUser({ email: DEFAULT_TEST_USER.email.toUpperCase(), password: DEFAULT_TEST_USER.password });
       expect(res.status).toBe(HTTP_STATUS.OK);
       expect(res.body.message).toMatch(MESSAGES.AUTH.LOGIN_SUCCESS);
       expect(res.body.data).toHaveProperty('token');
